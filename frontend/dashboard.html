@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tandem Staff Dashboard</title>
+
+    <style>
+        :root {
+            --ink: #0b2540;
+            --blue: #0055a2;
+            --gold: #e5a823;
+            --canvas: #f2f5f9;
+            --line: #dce5ef;
+            --muted: #607287;
+            --green: #1f8a70;
+            --red: #c8452f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 32px 20px;
+        }
+
+        .hero {
+            background: var(--ink);
+            color: white;
+            padding: 32px;
+            border-radius: 16px;
+            border-bottom: 5px solid var(--gold);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        .hero p {
+            color: #c8d6e5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat,
+        .panel,
+        .match {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 3px 10px #0000000d;
+        }
+
+        .stat strong {
+            display: block;
+            color: var(--blue);
+            font-size: 30px;
+        }
+
+        .stat span {
+            color: var(--muted);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .match {
+            margin-top: 14px;
+            border-left: 5px solid var(--blue);
+        }
+
+        .match h3 {
+            margin-top: 0;
+        }
+
+        .score {
+            color: var(--blue);
+            font-weight: bold;
+        }
+
+        .reason {
+            background: #e6f0fa;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--ink);
+        }
+
+        .gap {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .gap:last-child {
+            border-bottom: none;
+        }
+
+        .coverage {
+            color: var(--red);
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+            .stats,
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <section class="hero">
+            <h1>Tandem Staff Dashboard</h1>
+            <p>Review mentor matching results and identify recruitment needs.</p>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <strong id="studentCount">-</strong>
+                <span>Students</span>
+            </div>
+
+            <div class="stat">
+                <strong id="mentorCount">-</strong>
+                <span>Mentors</span>
+            </div>
+
+            <div class="stat">
+                <strong id="matchedCount">-</strong>
+                <span>Matched</span>
+            </div>
+
+            <div class="stat">
+                <strong id="matchRate">-</strong>
+                <span>Match Rate</span>
+            </div>
+        </section>
+
+        <section class="layout">
+            <div class="panel">
+                <h2>Sample Matches</h2>
+                <div id="matches">Loading matches...</div>
+            </div>
+
+            <div class="panel">
+                <h2>Supply Gaps</h2>
+                <div id="gaps">Loading gaps...</div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function safe(value) {
+            const div = document.createElement("div");
+            div.textContent = value ?? "";
+            return div.innerHTML;
+        }
+
+        async function loadDashboard() {
+            const response = await fetch("/team-demo");
+            const data = await response.json();
+
+            document.getElementById("studentCount").textContent = data.students;
+            document.getElementById("mentorCount").textContent = data.mentors;
+            document.getElementById("matchedCount").textContent = data.matched;
+            document.getElementById("matchRate").textContent =
+                `${data.match_rate}%`;
+
+            document.getElementById("matches").innerHTML =
+                data.matches.map(match => `
+                    <article class="match">
+                        <h3>
+                            Student ${safe(match.student_id)}
+                            → Mentor ${safe(match.mentor_id)}
+                        </h3>
+
+                        <p class="score">
+                            Score: ${safe(match.score)}/100
+                            · ${safe(match.confidence)} confidence
+                        </p>
+
+                        <p class="reason">
+                            ${safe(match.reason)}
+                        </p>
+
+                        ${
+                            match.gaps.length
+                            ? `<p><strong>Gaps:</strong>
+                                ${safe(match.gaps.join("; "))}</p>`
+                            : ""
+                        }
+                    </article>
+                `).join("");
+
+            document.getElementById("gaps").innerHTML =
+                data.supply_gaps.map(gap => `
+                    <div class="gap">
+                        <strong>${safe(gap.Tag)}</strong>
+                        <br>
+                        Students: ${safe(gap.Students)}
+                        <br>
+                        Mentor slots: ${safe(gap["Mentor slots"])}
+                        <br>
+                        <span class="coverage">
+                            Coverage: ${safe(gap["Coverage %"])}%
+                        </span>
+                    </div>
+                `).join("");
+        }
+
+        loadDashboard().catch(() => {
+            document.getElementById("matches").textContent =
+                "Unable to load dashboard data.";
+        });
+    </script>
+</body>
+</html>

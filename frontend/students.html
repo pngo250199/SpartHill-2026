@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tandem Mentor Matching</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        header {
+            background: #173b57;
+            color: white;
+            padding: 28px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #00000018;
+        }
+
+        label {
+            display: block;
+            margin-top: 16px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 24px;
+            padding: 12px 20px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #125ca1;
+        }
+
+        .match {
+            border-left: 5px solid #1976d2;
+            padding: 16px;
+            margin-top: 15px;
+            background: #f8fafc;
+        }
+
+        .score {
+            color: #1976d2;
+            font-weight: bold;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Tandem Mentorship Platform</h1>
+        <p>Find a mentor who matches your career goals.</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Student Profile</h2>
+
+            <form id="studentForm">
+                <label for="name">Name</label>
+                <input id="name" type="text" required placeholder="Enter your name">
+
+                <label for="interests">
+                    Career Interests
+                </label>
+                <input
+                    id="interests"
+                    type="text"
+                    required
+                    placeholder="Example: Embedded Systems, Python"
+                >
+
+                <label for="goals">
+                    Career Goals
+                </label>
+                <input
+                    id="goals"
+                    type="text"
+                    required
+                    placeholder="Example: Career Development, Internship"
+                >
+
+                <label for="needs">
+                    Development Needs
+                </label>
+                <input
+                    id="needs"
+                    type="text"
+                    required
+                    placeholder="Example: Interview Skills, Resume Review"
+                >
+
+                <button type="submit">Find My Mentors</button>
+            </form>
+
+            <p id="status"></p>
+        </section>
+
+        <section class="card">
+            <h2>Recommended Mentors</h2>
+            <div id="results">
+                <p>Submit your profile to see recommendations.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function convertToList(value) {
+            return value
+                .split(",")
+                .map(item => item.trim())
+                .filter(item => item.length > 0);
+        }
+
+        document
+            .getElementById("studentForm")
+            .addEventListener("submit", async function(event) {
+                event.preventDefault();
+
+                const status = document.getElementById("status");
+                const results = document.getElementById("results");
+
+                status.textContent = "Finding the best mentors...";
+                results.innerHTML = "";
+
+                const requestData = {
+                    student: {
+                        student_id: 1,
+                        name: document.getElementById("name").value,
+                        career_interests: convertToList(
+                            document.getElementById("interests").value
+                        ),
+                        goals: convertToList(
+                            document.getElementById("goals").value
+                        ),
+                        development_needs: convertToList(
+                            document.getElementById("needs").value
+                        )
+                    },
+
+                    instructors: [
+                        {
+                            instructor_id: 101,
+                            name: "Dr. Smith",
+                            expertise: [
+                                "Python",
+                                "Interview Skills"
+                            ],
+                            career_interests: [
+                                "Embedded Systems"
+                            ],
+                            available: true
+                        },
+                        {
+                            instructor_id: 102,
+                            name: "Dr. Lee",
+                            expertise: [
+                                "Career Development",
+                                "Python"
+                            ],
+                            career_interests: [
+                                "Software Engineering"
+                            ],
+                            available: true
+                        },
+                        {
+                            instructor_id: 103,
+                            name: "Dr. Brown",
+                            expertise: [
+                                "Embedded Systems",
+                                "Interview Skills"
+                            ],
+                            career_interests: [
+                                "Embedded Systems",
+                                "Python"
+                            ],
+                            available: true
+                        }
+                    ]
+                };
+
+                try {
+                    const response = await fetch("/matches", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("API request failed");
+                    }
+
+                    const matches = await response.json();
+
+                    status.textContent = "Matching complete.";
+
+                    if (matches.length === 0) {
+                        results.innerHTML =
+                            "<p>No suitable mentors were found.</p>";
+                        return;
+                    }
+
+                    results.innerHTML = matches.map((match, index) => `
+                        <div class="match">
+                            <h3>${index + 1}. ${match.instructor_name}</h3>
+                            <p class="score">
+                                Match Score: ${match.score}/100
+                            </p>
+                            <p>
+                                Interest matches:
+                                ${match.interest_matches.join(", ") || "None"}
+                            </p>
+                            <p>
+                                Goal matches:
+                                ${match.goal_matches.join(", ") || "None"}
+                            </p>
+                            <p>
+                                Development matches:
+                                ${match.development_matches.join(", ") || "None"}
+                            </p>
+                        </div>
+                    `).join("");
+
+                } catch (error) {
+                    status.textContent = "Unable to connect to the API.";
+                    results.innerHTML =
+                        "<p>Please make sure the FastAPI server is running.</p>";
+                }
+            });
+    </script>
+</body>
+</html>

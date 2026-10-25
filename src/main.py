@@ -1,92 +1,28 @@
-from dataclasses import dataclass
+from pathlib import Path
+
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse
+from Routes.matching import router as matching_router
+from Routes.team_demo import router as team_demo_router
+
+app = FastAPI(title="Tandem Mentorship API")
+
+app.include_router(matching_router)
+app.include_router(team_demo_router)
+
+@app.get("/")
+def home():
+    return {"message": "Tandem API is running"}
 
 
-@dataclass
-class Student:
-    student_id: int
-    name: str
-    tags: set[str]
+@app.get("/students", response_class=HTMLResponse)
+def students_page():
+    file_path = Path(__file__).parent.parent / "frontend" / "students.html"
 
+    return file_path.read_text(encoding="utf-8")
 
-@dataclass
-class Instructor:
-    instructor_id: int
-    name: str
-    tags: set[str]
-
-
-class MatchingSystem:
-    def __init__(self):
-        self.students = {}
-        self.instructors = {}
-        self.matches = {}  # student_id -> instructor_id
-
-    def add_student(self, student):
-        self.students[student.student_id] = student
-
-    def add_instructor(self, instructor):
-        self.instructors[instructor.instructor_id] = instructor
-
-    def calculate_score(self, student, instructor):
-        common_tags = student.tags & instructor.tags
-        return len(common_tags)
-
-    def find_best_match(self, student_id):
-        student = self.students[student_id]
-
-        available_instructors = [
-            instructor
-            for instructor in self.instructors.values()
-            if instructor.instructor_id not in self.matches.values()
-        ]
-
-        if not available_instructors:
-            return None
-
-        best_instructor = max(
-            available_instructors,
-            key=lambda instructor: self.calculate_score(student, instructor)
-        )
-
-        if self.calculate_score(student, best_instructor) == 0:
-            return None
-
-        self.matches[student_id] = best_instructor.instructor_id
-        return best_instructor
-
-    def display_matches(self):
-        for student_id, instructor_id in self.matches.items():
-            student = self.students[student_id]
-            instructor = self.instructors[instructor_id]
-
-            score = self.calculate_score(student, instructor)
-            common_tags = student.tags & instructor.tags
-
-            print(
-                f"{student.name} -> {instructor.name} | "
-                f"Score: {score} | Shared tags: {common_tags}"
-            )
-
-
-system = MatchingSystem()
-
-system.add_student(
-    Student(1, "Henry", {"Python", "Embedded Systems", "C"})
-)
-
-system.add_student(
-    Student(2, "Alice", {"AI", "Python", "Machine Learning"})
-)
-
-system.add_instructor(
-    Instructor(101, "Dr. Smith", {"Python", "Embedded Systems", "C"})
-)
-
-system.add_instructor(
-    Instructor(102, "Dr. Lee", {"AI", "Python", "Machine Learning"})
-)
-
-system.find_best_match(1)
-system.find_best_match(2)
-
-system.display_matches()
+@app.get("/dashboard")
+def dashboard_page():
+    file_path = Path(__file__).parent.parent / "frontend" / "dashboard.html"
+    return HTMLResponse(file_path.read_text(encoding="utf-8"))
