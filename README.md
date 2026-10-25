@@ -15,11 +15,17 @@ I developed the original object-oriented matching prototype.
 - Built and tested a separate rematching prototype for accepting or denying matches.
 - Debugged Python imports, package structure, Streamlit execution, and GitHub integration.
 
-My original architecture was object-oriented:
+### My original architecture was object-oriented:
+```text
+Student and Instructor objects
+        ↓
+MatchingEngine
+        ↓
+MatchResult objects
+```
 
-Student and Instructor objects -> MatchingEngine -> MatchResult objects
-
-My original Pipeline:
+### My original Pipeline:
+```text
 Student object + Instructor object
         ↓
 MatchingEngine
@@ -27,6 +33,7 @@ MatchingEngine
 MatchResult
         ↓
 FastAPI response
+```
 
 ### My Teammate's work
 My teammate developed the advanced matching and dashboard system.
@@ -50,7 +57,7 @@ My teammate developed the advanced matching and dashboard system.
 - Built the Streamlit dashboard and reporting interface.
 - Added optional machine-learning success prediction and learned weighting.
 
-#The advanced system uses dictionary-based student and mentor records:
+### The advanced system uses dictionary-based student and mentor records:
 
 ```text
 Student and mentor dictionaries
@@ -64,7 +71,9 @@ Student and mentor dictionaries
  Hungarian assignment algorithm
             ↓
       Streamlit dashboard
-The advanced pipeline:
+```
+### The advanced pipeline:
+```text
 Dictionary-based profiles
         ↓
 Advanced matching engine
@@ -134,6 +143,7 @@ My object-oriented implementation remains as the original matching prototype and
 
 The systems can be combined in the future using an adapter layer:
 
+```text
 OOP Student/Instructor objects
             ↓
 Adapter converts objects to dictionaries
@@ -141,6 +151,7 @@ Adapter converts objects to dictionaries
 Advanced matching engine
             ↓
 Ranked matches and assignments
+```
 
 Keeping the systems separated prevents duplicate matching logic and allows each implementation to be tested independently.
 
