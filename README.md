@@ -17,11 +17,7 @@ I developed the original object-oriented matching prototype.
 
 My original architecture was object-oriented:
 
-Student and Instructor objects
-            ↓
-MatchingEngine
-            ↓
-MatchResult objects
+Student and Instructor objects -> MatchingEngine -> MatchResult objects
 
 
 ### My Teammate's work
@@ -47,17 +43,7 @@ My teammate developed the advanced matching and dashboard system.
 - Added optional machine-learning success prediction and learned weighting.
 
 ### The advanced architecture uses dictionary-based records:
-Student and mentor dictionaries
-            ↓
-Eligibility filters
-            ↓
-score_pair()
-            ↓
-run_matching()
-            ↓
-Hungarian assignment
-            ↓
-Streamlit dashboard
+Student and mentor dictionaries -> Eligibility filters -> score_pair() -> run_matching() -> Hungarian assignment -> Streamlit dashboard
 
 
 ### Differences
@@ -95,7 +81,7 @@ Ranked matches and assignments
 
 Keeping the systems separated prevents duplicate matching logic and allows each implementation to be tested independently.
 
-###The key point is:
+### The key point is:
 
 My code = clean OOP foundation and API prototype
 Teammate code = advanced production-style matching and dashboard
