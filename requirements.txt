@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+numpy
+scipy
+pandas
+streamlit
+scikit-learn
+vaderSentiment
+openpyxl
