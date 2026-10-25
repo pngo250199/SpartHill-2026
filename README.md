@@ -1,4 +1,4 @@
-## Technical Contributions
+### Technical Contributions
 
 ### My Work
 
@@ -24,7 +24,7 @@ MatchingEngine
 MatchResult objects
 
 
-#My Teammate's work
+###My Teammate's work
 My teammate developed the advanced matching and dashboard system.
 - Created realistic student and mentor seed data.
 - Added eligibility filters for:
@@ -46,7 +46,7 @@ My teammate developed the advanced matching and dashboard system.
 - Built the Streamlit dashboard and reporting interface.
 - Added optional machine-learning success prediction and learned weighting.
 
-#The advanced architecture uses dictionary-based records:
+###The advanced architecture uses dictionary-based records:
 Student and mentor dictionaries
             ↓
 Eligibility filters
@@ -60,7 +60,7 @@ Hungarian assignment
 Streamlit dashboard
 
 
-#Differences
+###Differences
 | Area               | My System                                    | Teammate System                                  |
 |--------------------|----------------------------------------------|--------------------------------------------------|
 | Data structure     | Python objects and dataclasses               | Dictionaries and generated records               |
