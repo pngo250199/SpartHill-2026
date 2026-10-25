@@ -63,16 +63,17 @@ Streamlit dashboard
 
 
 #Differences
-| Area               | My System                      | Teammate System                             |
-|--------------------|--------------------------------|---------------------------------------------|
-| Data structure     | Python objects and dataclasses | Dictionaries and generated records          |
-| Matching           | Individual score ranking       | Global assignment                           |
-| Algorithm          | Weighted compatibility score   | Weighted score plus Hungarian algorithm     |
-| Capacity           | Basic availability             | Multiple mentor capacity slots              |
-| Interface          | FastAPI and HTML               | Streamlit dashboard                         |
-| Storage            | Application-level objects      | SQLite database                             |
-| Feedback           | Separate rematch prototype     | Integrated staff approval and denial        |
-| Explanations       | Match categories               | Reasons, gaps, confidence, and alternatives |
+| Area               | My System                                    | Teammate System                                  |
+|--------------------|----------------------------------------------|--------------------------------------------------|
+| Data structure     | Python objects and dataclasses               | Dictionaries and generated records               |
+| Matching           | Individual score ranking                     | Global assignment                                |
+| Algorithm          | Weighted compatibility score                 | Weighted score plus Hungarian algorithm          |
+| Capacity           | Basic availability                           | Multiple mentor capacity slots                   |
+| Interface          | FastAPI and HTML                             | Streamlit dashboard                              |
+| Run with           | PYTHONPATH=src uvicorn src.main:app --reload | PYTHONPATH=src streamlit run src/team_file/app.py|
+| Storage            | Application-level objects                    | SQLite database                                  |
+| Feedback           | Separate rematch prototype                   | Integrated staff approval and denial             |
+| Explanations       | Match categories                             | Reasons, gaps, confidence, and alternatives      |
 
 
 
