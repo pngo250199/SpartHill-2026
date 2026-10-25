@@ -19,6 +19,14 @@ My original architecture was object-oriented:
 
 Student and Instructor objects -> MatchingEngine -> MatchResult objects
 
+My original Pipeline:
+Student object + Instructor object
+        ↓
+MatchingEngine
+        ↓
+MatchResult
+        ↓
+FastAPI response
 
 ### My Teammate's work
 My teammate developed the advanced matching and dashboard system.
@@ -44,6 +52,49 @@ My teammate developed the advanced matching and dashboard system.
 
 ### The advanced architecture uses dictionary-based records:
 Student and mentor dictionaries -> Eligibility filters -> score_pair() -> run_matching() -> Hungarian assignment -> Streamlit dashboard
+
+The advanced pipeline:
+Dictionary-based profiles
+        ↓
+Advanced matching engine
+        ↓
+Hungarian assignment
+        ↓
+SQLite database
+        ↓
+Streamlit dashboard
+
+
+### Final matching pipeline
+Student/Mentor input
+        ↓
+Profile validation
+        ↓
+Eligibility filters
+(experience, mode, availability)
+        ↓
+Calculate pair scores
+(help areas, industry, background, availability)
+        ↓
+Create score matrix
+        ↓
+Hungarian algorithm
+(global one-to-one assignment)
+        ↓
+Check mentor capacity
+        ↓
+Generate results
+(score, reason, gaps, alternatives)
+        ↓
+Staff approves or denies
+        ↓
+Denied pair is excluded
+        ↓
+Rematch if necessary
+        ↓
+Save results in SQLite
+        ↓
+Display through Streamlit dashboard
 
 
 ### Differences
