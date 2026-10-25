@@ -17,7 +17,6 @@ I developed the original object-oriented matching prototype.
 
 My original architecture was object-oriented:
 
-```text
 Student and Instructor objects
             ↓
 MatchingEngine
@@ -26,7 +25,6 @@ MatchResult objects
 
 
 #My Teammate's work
-Teammate Work
 My teammate developed the advanced matching and dashboard system.
 - Created realistic student and mentor seed data.
 - Added eligibility filters for:
@@ -101,3 +99,12 @@ Keeping the systems separated prevents duplicate matching logic and allows each 
 
 My code = clean OOP foundation and API prototype
 Teammate code = advanced production-style matching and dashboard
+
+
+### Effectiveness Comparison
+
+My original OOP system is effective for a simple matching scenario. It is easy to understand, maintain, and use for ranking instructors for one student. Its main strength is its clean class-based structure and straightforward scoring logic.
+
+My teammate's system is more effective for the full mentorship program. It evaluates all students and mentors together, respects mentor capacity, checks availability, provides alternatives, and uses the Hungarian algorithm to create globally optimized assignments. It also includes staff review, SQLite storage, explanations, and a Streamlit dashboard.
+
+The tradeoff is that my system is simpler and easier to extend for learning, while my teammate's system is more complex but better suited for real-world use. Therefore, the final application uses my OOP prototype as the conceptual foundation and my teammate's advanced engine as the main production-style matching system.
