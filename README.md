@@ -50,9 +50,20 @@ My teammate developed the advanced matching and dashboard system.
 - Built the Streamlit dashboard and reporting interface.
 - Added optional machine-learning success prediction and learned weighting.
 
-### The advanced architecture uses dictionary-based records:
-Student and mentor dictionaries -> Eligibility filters -> score_pair() -> run_matching() -> Hungarian assignment -> Streamlit dashboard
+#The advanced system uses dictionary-based student and mentor records:
 
+```text
+Student and mentor dictionaries
+            ↓
+    Eligibility filters
+            ↓
+        score_pair()
+            ↓
+       run_matching()
+            ↓
+ Hungarian assignment algorithm
+            ↓
+      Streamlit dashboard
 The advanced pipeline:
 Dictionary-based profiles
         ↓
@@ -63,9 +74,10 @@ Hungarian assignment
 SQLite database
         ↓
 Streamlit dashboard
-
+```
 
 ### Final matching pipeline
+```text
 Student/Mentor input
         ↓
 Profile validation
@@ -95,7 +107,7 @@ Rematch if necessary
 Save results in SQLite
         ↓
 Display through Streamlit dashboard
-
+```
 
 ### Differences
 | Area               | My System                                    | Teammate System                                  |
